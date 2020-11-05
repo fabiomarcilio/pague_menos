@@ -2,8 +2,8 @@ version: '3.1'
 
 services:
   app:
-    image: python-django:3.9-3.1.2
-    container_name: trydjango
+    image: pague_menos:3.9-3.1
+    container_name: pague_menos
     user: dev:dev
     stdin_open: true
     tty: true
@@ -31,6 +31,4 @@ services:
        - ./files2docker/scripts:/scripts
        - ${LOCAL_PGDATA-./files2docker/databases}:/var/lib/postgresql/data
        - ${BACKUP_PATH-./files2docker/backup}:/backup
-    ports:
-      - ${POSTGRES_PORT-5432}:5432
     restart: unless-stopped
