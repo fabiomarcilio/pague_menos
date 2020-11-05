@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+  app:
+    image: python-django:3.9-3.1.2
+    container_name: trydjango
+    user: dev:dev
+    stdin_open: true
+    tty: true
+    environment:
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=${DATABASE_HOST-postgresql}
+      - DATABASE_PORT=${DATABASE_PORT-5432}
+      - SECRET_KEY=${SECRET_KEY}
+    ports:
+      - 8000:8000
+    volumes:
+      - ./app:/app
+
+  postgresql:
+    container_name: postgresql
+    image: postgres:9.6-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-postgresql}
+      TZ: ${TZ-America/Sao_Paulo}
+    volumes:
+       - ./files2docker/scripts:/scripts
+       - ${LOCAL_PGDATA-./files2docker/databases}:/var/lib/postgresql/data
+       - ${BACKUP_PATH-./files2docker/backup}:/backup
+    ports:
+      - ${POSTGRES_PORT-5432}:5432
+    restart: unless-stopped
